@@ -50,4 +50,22 @@ class EventsService extends Base\BaseService
         $data = json_decode($response->getBody(), true);
         return $data['response'];
     }
+
+
+    public function booking($eventId, string $name, $places)
+    {
+        $client = new \GuzzleHttp\Client();
+        $response = $client->post(
+            'https://leadbook.ru/test-task-api/events/' .$eventId. '/reserve',
+            [
+                'form_params' => [
+                    'name' => $name,
+                    'places' => $places,
+                ]
+            ]
+        );
+        $data = json_decode($response->getBody(), true);
+        return $data['response'];
+    }
+
 }
