@@ -8,8 +8,8 @@
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ isset($title) ? $title : 'Тестовое задание' }} </title>
-    @yield('head_styles')
-    @yield('head_scripts')
+    @yield('styles')
+    @yield('scripts')
 </head>
 <body>
 @yield('body')
