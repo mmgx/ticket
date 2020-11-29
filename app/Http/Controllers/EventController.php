@@ -8,6 +8,8 @@ use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 
 class EventController extends BaseController
 {
@@ -47,7 +49,7 @@ class EventController extends BaseController
      * @return Application|Factory|View
      * @throws GuzzleException
      */
-    public function places($eventId)
+    public function places(Request $request, $eventId)
     {
         $places = $this->eventsService->getPlaces($eventId);
 
@@ -69,21 +71,27 @@ class EventController extends BaseController
                 'MaxY' => "7563",
                 'MinX' => "3529",
                 'MinY' => "5105",
-                'Name_sec' => "Название местар",
+                'Name_sec' => "Название места",
                 'NomBilKn' => "1460",
                 'ObjectName' => "Place",
                 'ObjectType' => "Place",
                 'Price' => "1000",
                 'PriceSell' => "1000.0000",
-                'Row' => $place['y'],
-                'Seat' => $place['x'],
+                'Row' => $place['id'],
+                'Seat' => $place['id'],
                 'Width' => "30",
                 'avail' => $place['is_available'],
                 'cod_sec' => "290",
                 'name_sec' => "Название места"
             ];
         }
+        return view('pages.events.event')->withPlaces($places)->withEventId($eventId)->withSchemeData(json_encode($schemeData));
+    }
 
-        return view('pages.events.event')->withPlaces($places)->withSchemeData(json_encode($schemeData));
+
+    public function booking(Request $request)
+    {
+        $reservation = $this->eventsService->booking($request['eventId'], $request['username'], $request['username']);
+        return response()->json($reservation);
     }
 }
