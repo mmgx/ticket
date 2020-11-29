@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [SiteController::class, 'home'])->name('home');
+
+Route::group([
+    'prefix' => 'shows',
+    'as' => 'shows.',
+], function () {
+    Route::get('/', [EventController::class, 'index'])->name('index');
+    Route::get('/{showId}/events', [EventController::class, 'show'])->name('show');
 });
+
+Route::group([
+    'prefix' => 'events',
+    'as' => 'events.',
+], function () {
+    Route::get('/{eventId}/places', [EventController::class, 'places'])->name('places');
+});
+
+Route::post('booking', [EventController::class, 'booking'])->name('booking');
